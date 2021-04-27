@@ -8,6 +8,8 @@ import pandas as pd
 import numpy as np
 from scipy.interpolate import interp1d
 from matplotlib import pyplot as plt
+import seaborn as sns
+
 
 # Get main information about the given dataset
 def dataset_info(df, df_name):
@@ -75,5 +77,30 @@ def plot_ecdf(x, y, dataset_name, feature_name):
 	print(f'Median of {feature_name} = {np.round(np.median(x), 2)}')
 	print(f'Standard Deviation of {feature_name} = {np.round(np.std(x), 2)}')
 	print(f'Minimum value of {feature_name} = {np.min(x)}, Maximum value of {feature_name} = {np.max(x)}')
+
+	return None
+
+
+# Plot Density distributions with KDE (with Seaborn and Matplotlib)
+def plot_kde_distributions(feature, by, data):
+	'''
+	Args:
+		feature - name of feature that we want to see a distribution for : <string>
+		by - a criterion of spliting distributions : <string>
+		data - a given dataset : <Pandas DataFrame>
+	'''
+
+	colors = ['green', 'red', 'orange']
+
+	plt.rcParams['figure.figsize'] = (11.25, 3.15)
+	if len(data[by].unique()) > 0:
+		for this_by, this_color in zip(list(data[by].unique()), colors):
+			_ = sns.distplot(data[data['gender']==this_by][feature], color = this_color, label = this_by)
+	_ = plt.title(f'Distributions of Features by {feature.capitalize()}', fontsize=13, family='IBM Plex Arabic')
+	_ = plt.xlabel(feature.capitalize(), fontsize=10, family='IBM Plex Arabic')
+	_ = plt.ylabel('Density Count', fontsize=10, family='IBM Plex Arabic')
+	_ = plt.grid(which='major', c='#cccccc', alpha=0.5)
+	_ = plt.legend(shadow=True)
+	plt.show()
 
 	return None
