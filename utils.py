@@ -6,6 +6,7 @@ Prepared by Vytautas Bielinskas (2020)
 # Import modules and packages
 import pandas as pd
 import numpy as np
+from scipy.interpolate import interp1d
 from matplotlib import pyplot as plt
 
 # Get main information about the given dataset
@@ -58,6 +59,15 @@ def plot_ecdf(x, y, dataset_name, feature_name):
 	_ = plt.axvline(x=np.median(x), color='magenta', linestyle='--', linewidth=1, label='Median value')
 	_ = plt.yticks(np.linspace(0, 1, 11), family='IBM Plex Arabic', fontsize=9)
 	_ = plt.grid(which='major', color='#cccccc', alpha=0.5)
+
+	# Make some interpolations to draw lines between acutal point and median value
+	inter = interp1d(x, y)
+	y_median = inter(np.median(x))
+
+	# Draw lines
+	for this_x, this_y, in zip(x, y):
+	    _ = plt.plot([this_x, np.median(x)], [this_y, y_median], '--', color='#cccccc', alpha=0.05, linewidth=1)
+
 	_ = plt.legend(shadow=True)
 	plt.show()
 
