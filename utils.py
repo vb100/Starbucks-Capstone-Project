@@ -47,20 +47,23 @@ def plot_ecdf(x, y, dataset_name, feature_name):
 		dataset_name - a given name of actual dataset : <string>
 		feature_name - a given name of actual feature in a dataset : <string>
 	'''
-	plt.rcParams['figure.figsize'] = (11.25, 2.75)
+	plt.rcParams['figure.figsize'] = (11.25, 3.15)
 	_ = plt.title(f'Checking distribution for {dataset_name}: {feature_name}', family='IBM Plex Arabic', fontsize=13)
 	_ = plt.xlabel('Actual Values', family='IBM Plex Arabic', fontsize=10)
 	_ = plt.ylabel('ECDF percentage', family='IBM Plex Arabic', fontsize=10)
 	_ = plt.plot(x, y, c='#677478', marker='o', markersize=2, linewidth=0, linestyle=None, label=f'{feature_name} Record')
+	_ = plt.fill_between(x=x, y1=y, y2=0.5, color='green', where=y>=0.5, interpolate=True, alpha=0.12, label='Above Average')
+	_ = plt.fill_between(x=x, y1=y, y2=0.5, color='red', where=y<0.5, interpolate=True, alpha=0.12, label='Below Average')
+	_ = plt.axvspan(np.mean(x)-(np.nanstd(x)/2), np.mean(x)+(np.nanstd(x)/2), alpha=0.1, color='orange', label='Standard Deviation')
 	_ = plt.axvline(x=np.median(x), color='magenta', linestyle='--', linewidth=1, label='Median value')
 	_ = plt.yticks(np.linspace(0, 1, 11), family='IBM Plex Arabic', fontsize=9)
 	_ = plt.grid(which='major', color='#cccccc', alpha=0.5)
 	_ = plt.legend(shadow=True)
 	plt.show()
 
-	print(f'Average of {feature_name} = {np.mean(x)}')
-	print(f'Median of {feature_name} = {np.median(x)}')
-	print(f'Standard Deviation of {feature_name} = {np.std(x)}')
+	print(f'Average of {feature_name} = {np.round(np.mean(x), 2)}')
+	print(f'Median of {feature_name} = {np.round(np.median(x), 2)}')
+	print(f'Standard Deviation of {feature_name} = {np.round(np.std(x), 2)}')
 	print(f'Minimum value of {feature_name} = {np.min(x)}, Maximum value of {feature_name} = {np.max(x)}')
 
 	return None
