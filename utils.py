@@ -8,6 +8,8 @@ import pandas as pd
 import numpy as np
 from scipy.interpolate import interp1d
 from matplotlib import pyplot as plt
+import matplotlib.gridspec as gridspec
+import seabornfig2grid as sfg
 import seaborn as sns
 
 
@@ -68,7 +70,7 @@ def plot_ecdf(x, y, dataset_name, feature_name):
 
 	# Draw lines
 	for this_x, this_y, in zip(x, y):
-	    _ = plt.plot([this_x, np.median(x)], [this_y, y_median], '--', color='#cccccc', alpha=0.05, linewidth=1)
+		_ = plt.plot([this_x, np.median(x)], [this_y, y_median], '--', color='#cccccc', alpha=0.05, linewidth=1)
 
 	_ = plt.legend(shadow=True)
 	plt.show()
@@ -77,6 +79,41 @@ def plot_ecdf(x, y, dataset_name, feature_name):
 	print(f'Median of {feature_name} = {np.round(np.median(x), 2)}')
 	print(f'Standard Deviation of {feature_name} = {np.round(np.std(x), 2)}')
 	print(f'Minimum value of {feature_name} = {np.min(x)}, Maximum value of {feature_name} = {np.max(x)}')
+
+	return None
+
+
+# Plot Seaborn JointGrids in subplots on layyout 1x3
+def plot_subplots_sns_1x3(data, feature, by_x, by_y):
+	'''
+	Args:
+		data - a given DataFrame with data to be plotted : <pd.DataFrame>
+		feature - a given feature that is used to separate distributions in data : <string>
+		by_x, by_y - features which distributions should be ploted : <string>, <string>
+	'''
+	g_list = []
+	if len(data[feature].unique()) == 3:
+		unique_features = list(data[feature].unique())
+		for this_feature in unique_features:
+			this_subplot = sns.JointGrid(data=data[data[feature]==this_feature], x=by_x, y=by_y, space=0)
+			this_subplot.plot_joint(sns.kdeplot, fill=True, cmap="PuBuGn")
+			this_subplot.plot_marginals(sns.histplot, kde = True, color="#cccccc", alpha=1, bins=25)
+
+			g_list.append(this_subplot)
+
+		fig = plt.figure(figsize=(11.25, 4.75))
+		gs = gridspec.GridSpec(1, 3)
+
+		for i, this_subplot in enumerate(g_list):
+			sfg.SeabornFig2Grid(this_subplot, fig, gs[i])
+
+		gs.tight_layout(fig)
+		gs.update(top=0.7)
+
+		plt.show()
+
+	else:
+		print(len(data[feature].unique()))
 
 	return None
 
@@ -90,12 +127,13 @@ def plot_kde_distributions(feature, by, data):
 		data - a given dataset : <Pandas DataFrame>
 	'''
 
-	colors = ['green', 'red', 'orange']
+	colors = ['green', 'red', '#3495eb']
 
 	plt.rcParams['figure.figsize'] = (11.25, 3.15)
 	if len(data[by].unique()) > 0:
 		for this_by, this_color in zip(list(data[by].unique()), colors):
-			_ = sns.distplot(data[data['gender']==this_by][feature], color = this_color, label = this_by)
+			_ = sns.distplot(data[data[by]==this_by][feature], color = this_color, label = this_by)
+			print(f'{by.capitalize()} = {this_by}: median {feature} = {np.median(data[data[by]==this_by][feature])}, size of distribution is {len(data[data[by]==this_by][feature])} records.')
 	_ = plt.title(f'Distributions of Features by {feature.capitalize()}', fontsize=13, family='IBM Plex Arabic')
 	_ = plt.xlabel(feature.capitalize(), fontsize=10, family='IBM Plex Arabic')
 	_ = plt.ylabel('Density Count', fontsize=10, family='IBM Plex Arabic')
