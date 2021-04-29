@@ -96,8 +96,16 @@ def plot_subplots_sns_1x3(data, feature, by_x, by_y):
 		unique_features = list(data[feature].unique())
 		for this_feature in unique_features:
 			this_subplot = sns.JointGrid(data=data[data[feature]==this_feature], x=by_x, y=by_y, space=0)
-			this_subplot.ax_joint.text(int(np.median(data[data[feature]==this_feature][by_x]))+2, int(np.median(data[data[feature]==this_feature][by_y]))-6000, f'{by_x}={int(np.median(data[data[feature]==this_feature][by_x]))}', c='black', fontsize=9)
-			this_subplot.ax_joint.text(int(np.median(data[data[feature]==this_feature][by_x]))+2, int(np.median(data[data[feature]==this_feature][by_y]))+4000, f'{by_y}={int(np.median(data[data[feature]==this_feature][by_y]))}', c='black', fontsize=9)
+			this_subplot.ax_joint.text(
+				int(np.median(data[data[feature]==this_feature][by_x]))+2,
+				int(np.median(data[data[feature]==this_feature][by_y]))-6000,
+				f'{by_x}={int(np.median(data[data[feature]==this_feature][by_x]))}', c='black', fontsize=9
+				)
+			this_subplot.ax_joint.text(
+				int(np.median(data[data[feature]==this_feature][by_x]))+2,
+				int(np.median(data[data[feature]==this_feature][by_y]))+4000,
+				f'{by_y}={int(np.median(data[data[feature]==this_feature][by_y]))}', c='black', fontsize=9
+				)
 			this_subplot.fig.subplots_adjust(top=20.2)
 			plt.title(this_feature, fontsize=11, family='IBM Plex Arabic')
 			this_subplot.ax_joint.axvline(x=int(np.median(data[data[feature]==this_feature][by_x])), color='#070575', linestyle='--', linewidth=1)
