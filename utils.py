@@ -1,6 +1,6 @@
 '''
 This file is supplementary to Udacity Capstone Project: Starbuck Case
-Prepared by Vytautas Bielinskas (2020)
+Prepared by Vytautas Bielinskas (2021)
 '''
 
 # Import modules and packages
@@ -110,7 +110,7 @@ def plot_subplots_sns_1x3(data, feature, by_x, by_y):
 			plt.title(this_feature, fontsize=11, family='IBM Plex Arabic')
 			this_subplot.ax_joint.axvline(x=int(np.median(data[data[feature]==this_feature][by_x])), color='#070575', linestyle='--', linewidth=1)
 			this_subplot.ax_joint.axhline(y=int(np.median(data[data[feature]==this_feature][by_y])), color='#070575', linestyle='--', linewidth=1)
-			this_subplot.plot_joint(sns.kdeplot, fill=True, cmap="PuBuGn")
+			this_subplot.plot_joint(sns.kdeplot, fill=True, cmap='PuBuGn')
 			this_subplot.plot_marginals(sns.histplot, kde = True, color="#cccccc", alpha=1, bins=25)
 
 			g_list.append(this_subplot)
