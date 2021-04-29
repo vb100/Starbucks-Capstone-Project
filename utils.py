@@ -156,3 +156,21 @@ def plot_kde_distributions(feature, by, data):
 	plt.show()
 
 	return None
+
+
+# Print the random value (single) for the categorie of a feature in the given dataframe
+def show_categories_examples(data, feature, value):
+	'''
+	Args:
+		data - a given dataset : <Pandas DataFrame>
+		feature - a given feature to select values : <string>
+		value - a name of feature in a dataframe (data) to print its values for every single category
+	'''
+	if feature in data.columns:
+		for this_category in list(data[feature].unique()):
+			print(f'| {this_category} : value = {pd.DataFrame(data[data[feature]==this_category])[value].values[0]}')
+	else:
+		print('Please re-check arguments.')
+
+	return None
+
