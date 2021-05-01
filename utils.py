@@ -174,3 +174,34 @@ def show_categories_examples(data, feature, value):
 
 	return None
 
+
+# Pring values which are being stored in <value> column in the given dataframe
+def print_values_inside_column(data, column_name):
+	'''
+	Args:
+		data - a given dataset : <Pandas DataFrame>
+		value - a name of column
+	'''
+	l = []
+	for this_record in data[column_name]:
+
+		if len(this_record.keys()) > 1:
+			for i, this_key in enumerate(this_record.keys()):
+				d = {}
+				d['key']   = list(this_record.keys())[i]
+				d['value'] = list(this_record.values())[i]
+				l.append(dict(d))
+
+		else:
+			d = {}
+			d['key']   = list(this_record.keys())[0]
+			d['value'] = list(this_record.values())[0]
+			l.append(dict(d))
+	    
+	l_summary = []
+	for this_key in list(pd.DataFrame(l)['key'].unique()):
+		d = {}
+		d['key'], d['value'] = this_key, list(pd.DataFrame(l)[pd.DataFrame(l)['key']==this_key]['value'])[0]
+		l_summary.append(dict(d))
+
+	return pd.DataFrame(l_summary)
