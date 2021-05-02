@@ -175,7 +175,7 @@ def show_categories_examples(data, feature, value):
 	return None
 
 
-# Pring values which are being stored in <value> column in the given dataframe
+# Return values which are being stored in <value> column in the given dataframe
 def print_values_inside_column(data, column_name):
 	'''
 	Args:
