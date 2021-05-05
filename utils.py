@@ -13,6 +13,22 @@ import seabornfig2grid as sfg
 import seaborn as sns
 
 
+# Check if there any missing values in a dataframe
+def check_missing_data(df):
+	'''
+	Args:
+		df - a given dataset : <Pandas DataFrame>
+	'''
+	print('Checking for Missing data')
+	table = pd.DataFrame(df.isnull().sum())
+	print(table)
+
+	if np.sum(table[0]) == 0:
+		return 'There are now any missing values in the dataframe. Very good.'
+	else:
+		return 'WARNING. Please fix missing values, and then keep on.'
+
+
 # Get main information about the given dataset
 def dataset_info(df, df_name):
 	'''
