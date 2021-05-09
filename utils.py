@@ -229,29 +229,34 @@ def lenght_list(x):
 
 
 # Create dummies for datafrane
-def assign_dummies_keys(data_origin, column):
-    data = data_origin.copy()
+def assign_dummies_keys(data_origin, column_name):
+	'''
+	Args:
+		data_origin - a given dataset : <Pandas DataFrame>
+		column_name - a name of column
+	'''
+	data = data_origin.copy()
     # Find what is the maximum number of dummies could be
-    number_of_dummies = np.max(data[column].apply(lenght_list))
+	number_of_dummies = np.max(data[column_name].apply(lenght_list))
     
     # First the first row with the highest number of values in list
-    data['L'] = data[column].apply(lenght_list)
-    longest_list = list(data[data['L']==number_of_dummies].head(1)[column])[0]
-    new_columns = longest_list
+	data['L'] = data[column_name].apply(lenght_list)
+	longest_list = list(data[data['L']==number_of_dummies].head(1)[column_name])[0]
+	new_columns = longest_list
     
-    added_columns = []
-    for this_new_column in new_columns:
-        new_column_name = f'{column}_{this_new_column}'
-        data.insert(0, new_column_name, 0)
-        added_columns.append(new_column_name)
+	added_columns = []
+	for this_new_column in new_columns:
+		new_column_name = f'{column_name}_{this_new_column}'
+		data.insert(0, new_column_name, 0)
+		added_columns.append(new_column_name)
         
-        dummy_values = []
-        for i, this_record in enumerate(data[column].values):
-            if this_new_column in this_record:
-                dummy_values.append(1)
-            else:
-                dummy_values.append(0)
+		dummy_values = []
+		for i, this_record in enumerate(data[column_name].values):
+			if this_new_column in this_record:
+				dummy_values.append(1)
+			else:
+				dummy_values.append(0)
         
-        data[new_column_name] = dummy_values
+		data[new_column_name] = dummy_values
         
-    return data.drop(columns=[column, 'L'])
+	return data.drop(columns=[column_name, 'L'])
